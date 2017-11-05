@@ -81,7 +81,7 @@ router.get('/:id', function(req, res){
 router.put('/:id', function(req, res){
     var userPost = {
         name: req.body.name,
-        content: req.body.content,
+        email: req.body.email,
         pendingTasks: req.body.pendingTasks
     }
     user.findOneAndUpdate(req.params.id, userPost, function(err, users){
@@ -100,7 +100,7 @@ router.put('/:id', function(req, res){
         else{
             res.status(200).send({
                 message:'OK',
-                data: users
+                data: userPost
             });
         }
     });
