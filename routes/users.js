@@ -50,7 +50,7 @@ router.post('/', function(req, res){
 });
 
 router.get('/:id', function(req, res){
-    var query = user.find({ _id: req.params.id});
+    var query = user.findById(req.params.id);
     if (req.query.hasOwnProperty('where')) query = query.find(JSON.parse(req.query.where));
     if (req.query.hasOwnProperty('skip')) query = query.skip(JSON.parse(req.query.skip));
     if (req.query.hasOwnProperty('limit')) query = query.limit(JSON.parse(req.query.limit));
@@ -64,7 +64,7 @@ router.get('/:id', function(req, res){
                 message: err,
                 data: []
             });
-        }else if (!users.length){
+        }else if (!users){
             res.status(404).send({
                 message: "Invalid ID",
                 data: []
