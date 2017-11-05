@@ -84,53 +84,53 @@ router.put('/:id', function(req, res){
         email: req.body.email,
         pendingTasks: req.body.pendingTasks
     }
-    // user.findOneAndUpdate(req.params.id, userPost, function(err, users){
-    //     if (err){
-    //         res.status(404).send({
-    //             message: err,
-    //             data: []
-    //         });
-    //     }
-    //     else if (!user.length){
-    //         res.status(404).send({
-    //             message: "Invalid ID",
-    //             data: []
-    //         });
-    //     }
-    //     else{
-    //         res.status(200).send({
-    //             message:'OK',
-    //             data: users
-    //         });
-    //     }
-    // });
-    user.findById(req.params.id, function(err, users){
-        if(err){
+    user.findOneAndUpdate({_id: req.params.id}, userPost, function(err, users){
+        if (err){
             res.status(404).send({
                 message: err,
                 data: []
             });
-        }else if (!users){
+        }
+        else if (!user.length){
             res.status(404).send({
-                message: 'Update Invalid data',
+                message: "Invalid ID",
                 data: []
             });
-        }else{
-            user.update({ _id: req.params.id},userPost,function(err){
-                if(err){
-                    res.status(500).send({
-                        message: err,
-                        data: []
-                    });
-                }else{
-                    res.status(200).send({
-                        message: 'OK',
-                        data: users
-                    });
-                }
+        }
+        else{
+            res.status(200).send({
+                message:'OK',
+                data: users
             });
         }
     });
+    // user.findById(req.params.id, function(err, users){
+    //     if(err){
+    //         res.status(404).send({
+    //             message: err,
+    //             data: []
+    //         });
+    //     }else if (!users){
+    //         res.status(404).send({
+    //             message: 'Update Invalid data',
+    //             data: []
+    //         });
+    //     }else{
+    //         user.update({ _id: req.params.id},userPost,function(err){
+    //             if(err){
+    //                 res.status(500).send({
+    //                     message: err,
+    //                     data: []
+    //                 });
+    //             }else{
+    //                 res.status(200).send({
+    //                     message: 'OK',
+    //                     data: users
+    //                 });
+    //             }
+    //         });
+    //     }
+    // });
 });
 
 //TODO: Delete
