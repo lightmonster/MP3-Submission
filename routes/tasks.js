@@ -78,12 +78,12 @@ router.put('/:id', function(req, res){
     }
     task.findByIdAndUpdate(req.params.id, taskPost, function(err, tasks){
         if (err){
-            res.status(500).send({
+            res.status(404).send({
                 message: err,
                 data: []
             });
         }else{
-            res.status(201).send({
+            res.status(200).send({
                 message:'OK',
                 data: tasks
             });
@@ -95,12 +95,12 @@ router.put('/:id', function(req, res){
 router.delete('/:id', function(req, res){
     task.remove(req.params.id, function(err, tasks){
         if(err){
-            res.status(500).send({
+            res.status(404).send({
                 message: err,
                 data: []
             });
         }else{
-            res.status(201).send({
+            res.status(200).send({
                 message: 'resource deleted.',
                 data: []
             });
