@@ -84,7 +84,7 @@ router.put('/:id', function(req, res){
         content: req.body.content,
         pendingTasks: req.body.pendingTasks
     }
-    user.findOneAndUpdate(req.param.id, userPost, function(err, users){
+    user.findOneAndUpdate(req.params.id, userPost, function(err, users){
         if (err){
             res.status(404).send({
                 message: err,
