@@ -84,7 +84,7 @@ router.put('/:id', function(req, res){
         email: req.body.email,
         pendingTasks: req.body.pendingTasks
     }
-    user.findOneAndUpdate({_id: req.params.id}, userPost, function(err, users){
+    user.findOneAndUpdate(req.params.id, userPost,{new : true}, function(err, users){
         if (err){
             res.status(404).send({
                 message: err,
@@ -116,7 +116,21 @@ router.put('/:id', function(req, res){
     //             data: []
     //         });
     //     }else{
-    //         user.update({ _id: req.params.id},userPost,function(err){
+    //         // user.update({ _id: req.params.id},userPost,function(err){
+    //         //     if(err){
+    //         //         res.status(500).send({
+    //         //             message: err,
+    //         //             data: []
+    //         //         });
+    //         //     }else{
+    //         //         res.status(200).send({
+    //         //             message: 'OK',
+    //         //             data: users
+    //         //         });
+    //         //     }
+    //         // });
+    //         users.set(userPost);
+    //         users.save(function(err){
     //             if(err){
     //                 res.status(500).send({
     //                     message: err,
@@ -128,7 +142,7 @@ router.put('/:id', function(req, res){
     //                     data: users
     //                 });
     //             }
-    //         });
+    //         });            
     //     }
     // });
 });
