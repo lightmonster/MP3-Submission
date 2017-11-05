@@ -89,7 +89,7 @@ router.put('/:id', function(req, res){
         assignedUser: req.body.assignedUser,
         assignedUserName: req.body.assignedUserName,
     }
-    task.findOneAndUpdate(req.params.id, taskPost, function(err, tasks){
+    task.findOneAndUpdate(req.params.id, taskPost,{new : true}, function(err, tasks){
         if (err){
             res.status(404).send({
                 message: err,

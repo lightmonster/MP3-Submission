@@ -82,7 +82,7 @@ router.put('/:id', function(req, res){
     var userPost = {
         name: req.body.name,
         email: req.body.email,
-        pendingTasks: req.body.pendingTasks
+        pendingTasks: (!req.body.pendingTasks?[]:req.body.pendingTasks)
     }
     user.findOneAndUpdate(req.params.id, userPost,{new : true}, function(err, users){
         if (err){
