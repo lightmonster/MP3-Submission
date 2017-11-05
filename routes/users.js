@@ -100,7 +100,7 @@ router.put('/:id', function(req, res){
         else{
             res.status(200).send({
                 message:'OK',
-                data: userPost
+                data: users
             });
         }
     });

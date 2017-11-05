@@ -105,7 +105,7 @@ router.put('/:id', function(req, res){
         else{
             res.status(200).send({
                 message:'OK',
-                data: tasks
+                data: taskPost
             });
         }
     });
