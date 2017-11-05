@@ -83,11 +83,11 @@ router.get('/:id', function(req, res){
 router.put('/:id', function(req, res){
     var taskPost = {
         name: req.body.name,
-        description: req.body.description,
+        description: (!req.body.description?'':req.body.description),
         deadline: req.body.deadline,
-        completed: req.body.completed,
-        assignedUser: req.body.assignedUser,
-        assignedUserName: req.body.assignedUserName,
+        completed: (!req.body.completed?false:req.body.completed),
+        assignedUser: (!req.body.assignedUser?'':req.body.assignedUser),
+        assignedUserName: (!req.body.assignedUserName?'':req.body.assignedUserName)
     }
     task.findOneAndUpdate(req.params.id, taskPost,{new : true}, function(err, tasks){
         if (err){
