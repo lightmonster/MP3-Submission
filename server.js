@@ -8,8 +8,11 @@ var express = require('express'),
 // Create our Express application
 var app = express();
 
+// -- include schema
+var user = require('./models/user');
+var task = require('./models/task');
 // Use environment defined port or 4000
-var port = process.env.PORT || 4000;
+var port = process.env.PORT || 3000;
 
 // Connect to a MongoDB
 mongoose.connect(secrets.mongo_connection);
@@ -28,6 +31,11 @@ app.use(bodyParser.urlencoded({
     extended: true
 }));
 app.use(bodyParser.json());
+
+//test
+// app.get('/', function(req, res){
+//     res.send("Hello World");
+// })
 
 // Use routes as a module (see index.js)
 require('./routes')(app, router);
