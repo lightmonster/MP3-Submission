@@ -52,7 +52,7 @@ router.post('/', function(req, res){
 });
 
 router.get('/:id', function(req, res){
-    var query = user.find({ _id: req.params.id});
+    var query = task.find({ _id: req.params.id});
     if (req.query.hasOwnProperty('where')) query = query.find(JSON.parse(req.query.where));
     if (req.query.hasOwnProperty('skip')) query = query.skip(JSON.parse(req.query.skip));
     if (req.query.hasOwnProperty('limit')) query = query.limit(JSON.parse(req.query.limit));
@@ -64,6 +64,11 @@ router.get('/:id', function(req, res){
         if (err){
             res.status(404).send({
                 message: err,
+                data: []
+            });
+        }else if (!tasks.length){
+            res.status(404).send({
+                message: "Invalid ID",
                 data: []
             });
         }else{
@@ -84,13 +89,20 @@ router.put('/:id', function(req, res){
         assignedUser: req.body.assignedUser,
         assignedUserName: req.body.assignedUserName,
     }
-    task.findByIdAndUpdate(req.params.id, taskPost, function(err, tasks){
+    task.findOneAndUpdate(req.param.id, taskPost, function(err, tasks){
         if (err){
             res.status(404).send({
                 message: err,
                 data: []
             });
-        }else{
+        }
+        else if (!task.length){
+            res.status(404).send({
+                message: "Invalid ID",
+                data: []
+            });
+        }
+        else{
             res.status(200).send({
                 message:'OK',
                 data: tasks
@@ -106,6 +118,11 @@ router.delete('/:id', function(req, res){
         if(err){
             res.status(404).send({
                 message: err,
+                data: []
+            });
+        }else if (!tasks){
+            res.status(404).send({
+                message: "Invalid ID",
                 data: []
             });
         }else{
