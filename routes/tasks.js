@@ -52,7 +52,15 @@ router.post('/', function(req, res){
 });
 
 router.get('/:id', function(req, res){
-    task.findById(req.params.id, function(err, tasks){
+    var query = task.findById(req.params.id);
+    if (req.query.hasOwnProperty('where')) query = query.find(JSON.parse(req.query.where));
+    if (req.query.hasOwnProperty('skip')) query = query.skip(JSON.parse(req.query.skip));
+    if (req.query.hasOwnProperty('limit')) query = query.limit(JSON.parse(req.query.limit));
+    if (req.query.hasOwnProperty('sort')) query = query.sort(JSON.parse(req.query.sort));
+    if (req.query.hasOwnProperty('select')) query = query.select(JSON.parse(req.query.select));
+    if (req.query.hasOwnProperty('count')) query = query.count(JSON.parse(req.query.count));
+    query.exec(function(err, tasks) {
+    // task.findById(req.params.id, function(err, tasks){
         if (err){
             res.status(404).send({
                 message: err,
@@ -93,7 +101,8 @@ router.put('/:id', function(req, res){
 
 //TODO: Delete
 router.delete('/:id', function(req, res){
-    task.remove(req.params.id, function(err, tasks){
+    task.findByIdAndRemove({ _id: req.params.id}, function(err, tasks){
+    // task.remove({ _id: req.params.id}, function(err, tasks){
         if(err){
             res.status(404).send({
                 message: err,

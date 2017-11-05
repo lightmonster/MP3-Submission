@@ -50,7 +50,15 @@ router.post('/', function(req, res){
 });
 
 router.get('/:id', function(req, res){
-    user.findById(req.params.id, function(err, users){
+    var query = user.findById(req.params.id);
+    if (req.query.hasOwnProperty('where')) query = query.find(JSON.parse(req.query.where));
+    if (req.query.hasOwnProperty('skip')) query = query.skip(JSON.parse(req.query.skip));
+    if (req.query.hasOwnProperty('limit')) query = query.limit(JSON.parse(req.query.limit));
+    if (req.query.hasOwnProperty('sort')) query = query.sort(JSON.parse(req.query.sort));
+    if (req.query.hasOwnProperty('select')) query = query.select(JSON.parse(req.query.select));
+    if (req.query.hasOwnProperty('count')) query = query.count(JSON.parse(req.query.count));
+    query.exec(function(err, users) {
+    // user.findById(req.params.id, function(err, users){
         if (err){
             res.status(404).send({
                 message: err,
@@ -88,16 +96,25 @@ router.put('/:id', function(req, res){
 
 //TODO: Delete
 router.delete('/:id', function(req, res){
-    user.remove(req.params.id, function(err, users){
+    user.findOne({ _id: req.params.id},function(err, users){
         if(err){
             res.status(404).send({
                 message: err,
                 data: []
             });
         }else{
-            res.status(200).send({
-                message: 'resource deleted.',
-                data: []
+            user.remove(function(err){
+                if(err){
+                    res.status(404).send({
+                        message: err,
+                        data: []
+                    });
+                }else{
+                    res.status(200).send({
+                    message: 'resource deleted.',
+                    data: []
+                    });
+                }
             });
         }
     });
