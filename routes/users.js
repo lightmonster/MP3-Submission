@@ -61,7 +61,7 @@ router.get('/:id', function(req, res){
     // user.findById(req.params.id, function(err, users){
         if (err){
             res.status(404).send({
-                message: "Server Error",
+                message: err,
                 data: []
             });
         }else if (!users.length){
@@ -84,14 +84,14 @@ router.put('/:id', function(req, res){
         content: req.body.content,
         pendingTasks: req.body.pendingTasks
     }
-    user.findOneAndUpdate("59fe96fe05a17421d3d51dc2", userPost, function(err, users){
+    user.findOneAndUpdate(req.param.id, userPost, function(err, users){
         if (err){
             res.status(404).send({
                 message: err,
                 data: []
             });
         }
-        else if (!res.length){
+        else if (!user.length){
             res.status(404).send({
                 message: "Invalid ID",
                 data: []
@@ -104,48 +104,6 @@ router.put('/:id', function(req, res){
             });
         }
     });
-    // user.find({ _id: req.params.id}, function(err, res){
-    //     if(err){
-    //         res.status(404).send({
-    //             message: err,
-    //             data: []
-    //         });
-    //     }
-    //     else if (!users.length){
-    //         res.status(404).send({
-    //             message: 'Put Invalid data',
-    //             data: []
-    //         });
-    //     }else{
-    //         user.findByIdAndUpdate(req.params.id, userPost, function(err, users){
-    //             if(err){
-    //                 res.status(404).send({
-    //                     message: err,
-    //                     data: []
-    //                 });
-    //             }else{
-    //                 res.status(200).send({
-    //                     message:'OK',
-    //                     data: users
-    //                 });
-    //             }
-    //         });
-            // res.set(userPost);
-            // res.save(function(err, users){
-            //         if(err){
-            //             res.status(404).send({
-            //                 message: err,
-            //                 data: []
-            //             });
-            //         }else{
-            //             res.status(200).send({
-            //                 message:'OK',
-            //                 data: users
-            //             });
-            //         }
-            //     });
-        // }
-    // });
 });
 
 //TODO: Delete
