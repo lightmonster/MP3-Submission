@@ -15,7 +15,7 @@ router.get('/', function(req, res){
     query.exec(function(err, tasks) {
             if (err) {
                 res.status(500).send({
-                    massage: err,
+                    massage: 'Server Error',
                     data: []
                 });
             }else{
@@ -36,16 +36,25 @@ router.post('/', function(req, res){
         assignedUser: req.body.assignedUser,
         assignedUserName: req.body.assignedUserName,
     }
-    task.create(taskPost, function(err, tasks){
-        if (err){
+    user.find({email: req.body.email}, function(err, users){
+        if (users.length > 0){
             res.status(500).send({
-                message: err,
+                message: 'Duplicate email address',
                 data: []
             });
-        }else{//sucess
-            res.status(201).send({
-            message: 'OK',
-            data: tasks 
+        }else{
+            task.create(taskPost, function(err, tasks){
+                if (err){
+                    res.status(500).send({
+                        message: 'Server Error',
+                        data: []
+                    });
+                }else{//sucess
+                    res.status(201).send({
+                    message: 'OK',
+                    data: tasks 
+                    });
+                }
             });
         }
     });
@@ -63,7 +72,7 @@ router.get('/:id', function(req, res){
     // task.findById(req.params.id, function(err, tasks){
         if (err){
             res.status(404).send({
-                message: err,
+                message: 'Server Error',
                 data: []
             });
         }else if (!tasks){
@@ -92,7 +101,7 @@ router.put('/:id', function(req, res){
     task.findOneAndUpdate(req.params.id, taskPost,{new : true}, function(err, tasks){
         if (err){
             res.status(404).send({
-                message: err,
+                message: 'Server Error',
                 data: []
             });
         }
@@ -117,7 +126,7 @@ router.delete('/:id', function(req, res){
     // task.remove({ _id: req.params.id}, function(err, tasks){
         if(err){
             res.status(404).send({
-                message: err,
+                message: 'Server Error',
                 data: []
             });
         }else if (!tasks){

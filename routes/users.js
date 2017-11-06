@@ -15,8 +15,8 @@ router.get('/', function(req, res){
     query.exec(function(err, users) {
     // user.find({}, function(err, users) {
         if (err) {
-            res.status(404).send({
-                massage: err,
+            res.status(500).send({
+                massage: 'Server Error',
                 data: []
             });
         }else{
@@ -34,16 +34,25 @@ router.post('/', function(req, res){
         email: req.body.email,
         pendingTasks: req.body.pendingTasks
     }
-    user.create(userPost, function(err, users){
-        if (err){
+    user.find({email: req.body.email}, function(err, users){
+        if (users.length > 0){
             res.status(500).send({
-                message: err,
+                message: 'Duplicate email address',
                 data: []
             });
-        }else{//sucess
-            res.status(201).send({
-               message: 'OK',
-               data: users 
+        }else{
+            user.create(userPost, function(err, users){
+                if (err){
+                    res.status(500).send({
+                        message: 'Server Error',
+                        data: []
+                    });
+                }else{//sucess
+                    res.status(201).send({
+                       message: 'OK',
+                       data: users 
+                    });
+                }
             });
         }
     });
@@ -60,8 +69,8 @@ router.get('/:id', function(req, res){
     query.exec(function(err, users) {
     // user.findById(req.params.id, function(err, users){
         if (err){
-            res.status(404).send({
-                message: err,
+            res.status(500).send({
+                message: 'Server Error',
                 data: []
             });
         }else if (!users){
@@ -86,8 +95,8 @@ router.put('/:id', function(req, res){
     }
     user.findOneAndUpdate(req.params.id, userPost,{new : true}, function(err, users){
         if (err){
-            res.status(404).send({
-                message: err,
+            res.status(500).send({
+                message: 'Server Error',
                 data: []
             });
         }
@@ -104,55 +113,14 @@ router.put('/:id', function(req, res){
             });
         }
     });
-    // user.findById(req.params.id, function(err, users){
-    //     if(err){
-    //         res.status(404).send({
-    //             message: err,
-    //             data: []
-    //         });
-    //     }else if (!users){
-    //         res.status(404).send({
-    //             message: 'Update Invalid data',
-    //             data: []
-    //         });
-    //     }else{
-    //         // user.update({ _id: req.params.id},userPost,function(err){
-    //         //     if(err){
-    //         //         res.status(500).send({
-    //         //             message: err,
-    //         //             data: []
-    //         //         });
-    //         //     }else{
-    //         //         res.status(200).send({
-    //         //             message: 'OK',
-    //         //             data: users
-    //         //         });
-    //         //     }
-    //         // });
-    //         users.set(userPost);
-    //         users.save(function(err){
-    //             if(err){
-    //                 res.status(500).send({
-    //                     message: err,
-    //                     data: []
-    //                 });
-    //             }else{
-    //                 res.status(200).send({
-    //                     message: 'OK',
-    //                     data: users
-    //                 });
-    //             }
-    //         });            
-    //     }
-    // });
 });
 
 //TODO: Delete
 router.delete('/:id', function(req, res){
     user.find({ _id: req.params.id},function(err, users){
         if(err){
-            res.status(404).send({
-                message: err,
+            res.status(500).send({
+                message: 'Server Error',
                 data: []
             });
         }else if (!users.length){
@@ -164,7 +132,7 @@ router.delete('/:id', function(req, res){
             user.remove({ _id: req.params.id},function(err){
                 if(err){
                     res.status(500).send({
-                        message: err,
+                        message: 'Server Error',
                         data: []
                     });
                 }else{
