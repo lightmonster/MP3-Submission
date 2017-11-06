@@ -36,25 +36,16 @@ router.post('/', function(req, res){
         assignedUser: req.body.assignedUser,
         assignedUserName: req.body.assignedUserName,
     }
-    user.find({email: req.body.email}, function(err, users){
-        if (users.length > 0){
+    task.create(taskPost, function(err, tasks){
+        if (err){
             res.status(500).send({
-                message: 'Duplicate email address',
+                message: 'Server Error',
                 data: []
             });
-        }else{
-            task.create(taskPost, function(err, tasks){
-                if (err){
-                    res.status(500).send({
-                        message: 'Server Error',
-                        data: []
-                    });
-                }else{//sucess
-                    res.status(201).send({
-                    message: 'OK',
-                    data: tasks 
-                    });
-                }
+        }else{//sucess
+            res.status(201).send({
+            message: 'OK',
+            data: tasks 
             });
         }
     });
